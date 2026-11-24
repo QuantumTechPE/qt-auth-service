@@ -1,0 +1,34 @@
+# Pase a producción. La lógica vive en qt-infra (service-pase.yml).
+#   Comentarios en el issue de pase: /rechazar /agendar /ratificar /revertir
+#   repository_dispatch "pase-ejecutar": lo envía el agendador de qt-infra
+#   a la fecha y hora aprobadas por un admin.
+name: Pase a producción
+
+on:
+  issue_comment:
+    types: [created]
+  repository_dispatch:
+    types: [pase-ejecutar]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pase-${{ github.event.issue.number || github.event.client_payload.issue }}
+  cancel-in-progress: false
+
+jobs:
+  pase:
+    name: Pase
+    if: >-
+      github.event_name == 'repository_dispatch' ||
+      (github.event.issue.pull_request == null &&
+       contains(github.event.issue.labels.*.name, 'pase') &&
+       startsWith(github.event.comment.body, '/'))
+    uses: QuantumTechPE/qt-infra/.github/workflows/service-pase.yml@master
+    permissions:
+      contents: read
+      id-token: write
+      actions: read
+      packages: write
+      attestations: read
