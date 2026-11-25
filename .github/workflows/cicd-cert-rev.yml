@@ -1,7 +1,7 @@
-# CICD QA REV · "/rechazar <motivo>" en el issue de pase: QA rechaza el release,
-# QA vuelve a lo que corre en producción (release de reversión) y se recrean
+# CICD CERT REV · "/rechazar <motivo>" en el issue de pase: CERT rechaza el release,
+# CERT vuelve a lo que corre en producción (release de reversión) y se recrean
 # las ramas qt/<n> para corregir.
-name: CICD QA REV
+name: CICD CERT REV
 
 on:
   issue_comment:
@@ -12,13 +12,13 @@ permissions:
 
 jobs:
   reversion:
-    name: CICD QA REV
+    name: CICD CERT REV
     if: >-
       github.event.issue.pull_request == null &&
       contains(github.event.issue.labels.*.name, 'pase') &&
       startsWith(github.event.comment.body, '/rechazar')
     # El turno se toma DENTRO del job (no a nivel workflow): un comentario dispara
-    # CICD PROD, CICD QA REV y CICD PROD REV, y los que no aplican se saltan sin
+    # CICD PROD, CICD CERT REV y CICD PROD REV, y los que no aplican se saltan sin
     # ocupar el turno ni cancelar al que sí corre.
     concurrency:
       group: pase-${{ github.event.issue.number || github.event.client_payload.issue }}
