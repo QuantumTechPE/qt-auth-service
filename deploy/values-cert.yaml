@@ -1,5 +1,5 @@
 # =============================================================================
-# qt-auth-service · QA  (se despliega con cada release vX.Y.Z)
+# qt-auth-service · CERT  (se despliega con cada release vX.Y.Z)
 # =============================================================================
 
 # ---- Plan de recursos por pod -------------------------------------------------
@@ -22,6 +22,3 @@ autoscaling:
 
 podDisruptionBudget:
   enabled: false
-
-# ---- ConfigMap del ambiente → variables de entorno ----------------------------
-config: {}
