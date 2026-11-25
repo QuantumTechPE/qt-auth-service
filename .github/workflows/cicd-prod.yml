@@ -1,8 +1,8 @@
-# Pase a producción. La lógica vive en qt-infra (service-pase.yml).
-#   Comentarios en el issue de pase: /rechazar /agendar /ratificar /revertir
-#   repository_dispatch "pase-ejecutar": lo envía el agendador de qt-infra
-#   a la fecha y hora aprobadas por un admin.
-name: Pase a producción
+# CICD PROD · pase a producción, en el issue de pase:
+#   /agendar AAAA-MM-DD HH:MM → aprobación de un admin → ejecución automática a
+#   la hora agendada (lo dispara el agendador de qt-infra) → /ratificar
+#   (release final vX.Y.Z).
+name: CICD PROD
 
 on:
   issue_comment:
@@ -24,7 +24,7 @@ jobs:
       github.event_name == 'repository_dispatch' ||
       (github.event.issue.pull_request == null &&
        contains(github.event.issue.labels.*.name, 'pase') &&
-       startsWith(github.event.comment.body, '/'))
+       (startsWith(github.event.comment.body, '/agendar') || startsWith(github.event.comment.body, '/ratificar')))
     uses: QuantumTechPE/qt-infra/.github/workflows/service-pase.yml@master
     permissions:
       contents: read
