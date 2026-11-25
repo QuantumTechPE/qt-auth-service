@@ -16,17 +16,21 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @Produces(MediaType.APPLICATION_JSON)
 public class PingResource {
 
+    private final String service;
     private final String version;
 
-    public PingResource(@ConfigProperty(name = "qt.version") String version) {
+    public PingResource(
+            @ConfigProperty(name = "quarkus.application.name") String service,
+            @ConfigProperty(name = "qt.version") String version) {
+        this.service = service;
         this.version = version;
     }
 
     @GET
     public Pong ping() {
-        return new Pong("ok", Instant.now().toString(), version);
+        return new Pong("ok", service, version, Instant.now().toString());
     }
 
-    public record Pong(String status, String timestamp, String version) {
+    public record Pong(String status, String service, String version, String timestamp) {
     }
 }

@@ -19,6 +19,7 @@ class PingResourceTest {
                 .then()
                 .statusCode(200)
                 .body("status", equalTo("ok"))
+                .body("service", equalTo("qt-auth-service"))
                 .body("version", notNullValue())
                 .extract().path("timestamp");
         assertDoesNotThrow(() -> Instant.parse(timestamp));
