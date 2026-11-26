@@ -25,10 +25,3 @@ podDisruptionBudget:       # durante mantenimientos de nodos siempre queda 1 pod
   enabled: true
   minAvailable: 1
 spreadAcrossNodes: true    # réplicas en nodos distintos
-
-# ---- PRUEBA QT-6 (temporal): readiness inexistente SOLO en prod -----------------
-# Fuerza que la versión no quede Healthy en el pase para probar el rollback
-# automático. Se elimina en la tarea siguiente.
-probes:
-  readiness:
-    path: /q/health/no-existe
